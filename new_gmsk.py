@@ -122,12 +122,12 @@ plot_data(yt_modified)
 
 ###########################noise section############################
 
-# noise = (np.random.randn(len(yt)))*A_n
-# snr = 10*np.log10(np.mean(np.square(yt)) / np.mean(np.square(noise)))
-# print "SNR = %fdB" % snr
-# yt=np.add(yt,noise)
-# #view the data after adding noise
-# plot_data(yt)
+noise = (np.random.randn(len(yt)))*A_n
+snr = 10*np.log10(np.mean(np.square(yt)) / np.mean(np.square(noise)))
+print "SNR = %fdB" % snr
+yt_modified=np.add(yt_modified,noise)
+#view the data after adding noise
+plot_data(yt_modified)
 
 
 #####################demodulate###########################
@@ -135,8 +135,8 @@ plot_data(yt_modified)
 h=signal.firwin( numtaps=50, cutoff=300, nyq=Fs)
 
 
-cos_phi_mul=np.multiply(yt,carrier_cos)
-sin_phi_mul=np.multiply(yt,carrier_sin)
+cos_phi_mul=np.multiply(yt_modified,carrier_cos)
+sin_phi_mul=np.multiply(yt_modified,carrier_sin)
 cos_phi_filt=signal.lfilter( h, 1.0, cos_phi_mul)
 sin_phi_filt=signal.lfilter( h, 1.0, sin_phi_mul)
 
@@ -150,15 +150,28 @@ plt.plot(t,100*data_in_modified,'k',linewidth='2')
 # plt.plot(t,cos_phi_filt)
 
 
-out=np.diff(sin_inv)*Fs
+out=np.diff(tan_inv)*Fs
 out=np.hstack((0,out))
 
-# out=out[25:len(yt)]
+out=out[25:len(yt)]
 
-# out=np.hstack((out,np.zeros(25)))
+out=np.hstack((out,np.zeros(25)))
 plt.plot(t,-1*out,'r')
-# out_env = np.abs(sigtool.hilbert(out))
-# plt.plot(t,out_env,'m')
+
+######################estimating channel##########################
+
+analytical_yt=hilbert(yt)
+analytical_yt_modified=hilbert(yt_modified)
+
+h=0
+
+
+for i in range(len(yt)):
+	h+=analytical_yt_modified[i]/analytical_yt[i]
+
+h/=len(yt)
+
+print "complex constant", h
 
 
 ######calculating BER################
