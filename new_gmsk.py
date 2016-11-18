@@ -3,6 +3,7 @@ import pylab as pl
 import scipy.signal.signaltools as sigtool
 import scipy.ndimage.filters as filters
 import scipy.signal as signal
+from scipy.signal import hilbert
 from numpy.random import sample
 from scipy import *
 import matplotlib.pyplot as plt
@@ -11,10 +12,10 @@ import matplotlib.pyplot as plt
 Fc = 1000       #simulate a carrier frequency of 1kHz
 Fbit = 50       #simulated bitrate of data
 Fdev = 500      #frequency deviation, make higher than bitrate
-N = 10        #how many bits to send
+N = 40        #how many bits to send
 A = 1           #transmitted signal amplitude
 Fs = 10000     #sampling frequency for the simulator, must be higher than twice the carrier frequency
-A_n = 0.10      #noise peak amplitude
+A_n = 0.01      #noise peak amplitude
 N_prntbits = 10 #number of bits to print in plots
 
 def plot_data(y):
@@ -52,7 +53,7 @@ Data in
 """
 #generate some random data for testing
 data_in = np.random.random_integers(0,1,N)
-print "kk" ,data_in
+print "data input" ,data_in
 #data_in=np.ones(N)
 
 def data_in_modf(data_in):
@@ -106,15 +107,22 @@ quad_comp=np.multiply(sin_ct,carrier_sin)
 
 yt=in_comp-quad_comp
 
-
-
-
 plot_data(yt)
+
+####################### Multiplying by complex number###################
+
+analytical_yt=hilbert(yt)
+
+analytical_yt=analytical_yt*(1+1j)
+
+yt_modified=analytical_yt.real
+
+plot_data(yt_modified)
 
 
 ###########################noise section############################
 
-# noise = (np.random.randn(len(yt)))*0.001
+# noise = (np.random.randn(len(yt)))*A_n
 # snr = 10*np.log10(np.mean(np.square(yt)) / np.mean(np.square(noise)))
 # print "SNR = %fdB" % snr
 # yt=np.add(yt,noise)
@@ -122,11 +130,9 @@ plot_data(yt)
 # plot_data(yt)
 
 
-
-
-
 #####################demodulate###########################
-h=signal.firwin( numtaps=50, cutoff=Fc*2, nyq=Fs)
+
+h=signal.firwin( numtaps=50, cutoff=300, nyq=Fs)
 
 
 cos_phi_mul=np.multiply(yt,carrier_cos)
@@ -136,14 +142,15 @@ sin_phi_filt=signal.lfilter( h, 1.0, sin_phi_mul)
 
 
 tan_inv=np.arctan(sin_phi_filt/cos_phi_filt)
+sin_inv=np.arcsin(sin_phi_filt)
 
 
-plt.plot(t,sin_phi_filt,'g')
-plt.plot(t,data_in_modified,'k',linewidth='2')
-plt.plot(t,cos_phi_filt)
+# plt.plot(t,sin_phi_filt,'g')
+plt.plot(t,100*data_in_modified,'k',linewidth='2')
+# plt.plot(t,cos_phi_filt)
 
 
-out=np.diff(sin_phi_filt)*Fs
+out=np.diff(sin_inv)*Fs
 out=np.hstack((0,out))
 
 # out=out[25:len(yt)]
@@ -153,4 +160,33 @@ plt.plot(t,-1*out,'r')
 # out_env = np.abs(sigtool.hilbert(out))
 # plt.plot(t,out_env,'m')
 
+
+######calculating BER################
+
+BitError=0
+for i in range(len(data_in)):
+	total=0
+	for j in range(0,int(0.5*Fs/Fbit)):
+
+		if abs(out[i*Fs/Fbit+2*j])<100:
+			total+=out[i*Fs/Fbit+2*j]
+
+	if total>=0:
+		bit=0
+	else:
+		bit=1
+
+	print bit ,
+
+	if data_in[i]!=bit:
+		BitError+=1
+
+print 
+print "Total Error Bits",BitError*100.0/len(data_in),"%"
 plt.show()
+
+
+
+
+
+
