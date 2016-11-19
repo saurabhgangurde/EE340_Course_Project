@@ -9,12 +9,12 @@ from scipy import *
 import matplotlib.pyplot as plt
 
 #the following variables setup the system
-Fc = 1000       #simulate a carrier frequency of 1kHz
-Fbit = 50       #simulated bitrate of data
-Fdev = 500      #frequency deviation, make higher than bitrate
-N = 40        #how many bits to send
+Fc = 10000       #simulate a carrier frequency of 1kHz
+Fbit = 500       #simulated bitrate of data
+Fdev = 5000      #frequency deviation, make higher than bitrate
+N = 100        #how many bits to send
 A = 1           #transmitted signal amplitude
-Fs = 10000     #sampling frequency for the simulator, must be higher than twice the carrier frequency
+Fs = 40000     #sampling frequency for the simulator, must be higher than twice the carrier frequency
 A_n = 0.01      #noise peak amplitude
 N_prntbits = 10 #number of bits to print in plots
 
@@ -53,7 +53,7 @@ Data in
 """
 #generate some random data for testing
 data_in = np.random.random_integers(0,1,N)
-print "data input" ,data_in
+# print "data input" ,data_in
 #data_in=np.ones(N)
 
 def data_in_modf(data_in):
@@ -72,7 +72,7 @@ VCO
 
 data_in_modified=data_in_modf(data_in)
 
-filters.gaussian_filter(data_in_modified, 20, order=0, output=data_in_modified)
+filters.gaussian_filter(data_in_modified, 10, order=0, output=data_in_modified)
 
 plt.plot(t,data_in_modified)
 plt.show()
@@ -86,12 +86,10 @@ c_t=[0 for i in range(len(data_in_modified))]
 for i in range(len(data_in_modified)):
     c_t[i]=c_t[i-1]+data_in_modified[i]
 
-
-
-
 c_t=np.array(c_t)
 c_t=10*c_t/Fs
-#scipy.ndimage.filters.gaussian_filter(c_t, sigma)
+
+
 
 cos_ct=np.cos(c_t)
 sin_ct=np.sin(c_t)
@@ -123,7 +121,7 @@ plot_data(yt_modified)
 ###########################noise section############################
 
 noise = (np.random.randn(len(yt)))*A_n
-snr = 10*np.log10(np.mean(np.square(yt)) / np.mean(np.square(noise)))
+snr = 10*np.log10(np.mean(np.square(yt_modified)) / np.mean(np.square(noise)))
 print "SNR = %fdB" % snr
 yt_modified=np.add(yt_modified,noise)
 #view the data after adding noise
@@ -132,7 +130,7 @@ plot_data(yt_modified)
 
 #####################demodulate###########################
 
-h=signal.firwin( numtaps=50, cutoff=300, nyq=Fs)
+h=signal.firwin( numtaps=50, cutoff=2500, nyq=Fs)
 
 
 cos_phi_mul=np.multiply(yt_modified,carrier_cos)
@@ -146,7 +144,7 @@ sin_inv=np.arcsin(sin_phi_filt)
 
 
 # plt.plot(t,sin_phi_filt,'g')
-plt.plot(t,100*data_in_modified,'k',linewidth='2')
+plt.plot(t,10*data_in_modified,'k',linewidth='2')
 # plt.plot(t,cos_phi_filt)
 
 
@@ -176,6 +174,7 @@ print "complex constant", h
 
 ######calculating BER################
 
+data_received=[]
 BitError=0
 for i in range(len(data_in)):
 	total=0
@@ -189,12 +188,13 @@ for i in range(len(data_in)):
 	else:
 		bit=1
 
-	print bit ,
+	data_received.append(bit)
+	# print bit ,
 
 	if data_in[i]!=bit:
 		BitError+=1
 
-print 
+print data_received
 print "Total Error Bits",BitError*100.0/len(data_in),"%"
 plt.show()
 
