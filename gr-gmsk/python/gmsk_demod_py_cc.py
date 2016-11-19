@@ -49,8 +49,9 @@ class gmsk_demod_py_cc(gr.sync_block):
         out = output_items[0]
         # <+signal processing here+>
 
-        h=signal.firwin( numtaps=50, cutoff=2500, nyq=Fs)
+        h=signal.firwin( numtaps=50, cutoff=500, nyq=Fs)
 
+        print "demodulator input:", len(in0)
         sin_phi_mul=in0.imag
         cos_phi_mul=in0.real
         
@@ -63,9 +64,9 @@ class gmsk_demod_py_cc(gr.sync_block):
         demodulated=numpy.diff(sin_inv)*Fs
         demodulated=numpy.hstack((0,demodulated))
 
-        demodulated=demodulated[25:len(in0)]
+        # demodulated=demodulated[25:len(in0)]
 
-        demodulated=numpy.hstack((demodulated,numpy.zeros(25)))
+        # demodulated=numpy.hstack((demodulated,numpy.zeros(25)))
         
         out[:] = demodulated
         return len(output_items[0])

@@ -67,7 +67,7 @@ class gmsk_py_cc(gr.sync_block):
         c_t=numpy.array(c_t)
 
         c_t=10*c_t/Fs
-        # print len(in0)
+        print "modulator input:", len(in0)
 
 
         out[:] = numpy.cos(c_t)+1j*numpy.sin(c_t)

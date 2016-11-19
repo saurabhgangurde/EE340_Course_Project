@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Top Block
-# Generated: Sat Nov 19 20:20:05 2016
+# Generated: Sat Nov 19 21:05:25 2016
 ##################################################
 
 from gnuradio import analog
@@ -88,9 +88,11 @@ class top_block(grc_wxgui.top_block_gui):
         self.gmsk_gmsk_py_cc_0 = gmsk.gmsk_py_cc()
         self.gmsk_gmsk_demod_py_cc_0 = gmsk.gmsk_demod_py_cc()
         self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate)
+        self.blocks_multiply_xx_1 = blocks.multiply_vcc(1)
         self.blocks_multiply_xx_0 = blocks.multiply_vcc(1)
         self.blocks_add_xx_0 = blocks.add_vcc(1)
-        self.analog_sig_source_x_1 = analog.sig_source_c(samp_rate, analog.GR_COS_WAVE, 5000, 1, 0)
+        self.analog_sig_source_x_1_0 = analog.sig_source_c(samp_rate, analog.GR_COS_WAVE, 2000, 1, 0)
+        self.analog_sig_source_x_1 = analog.sig_source_c(samp_rate, analog.GR_COS_WAVE, 2000, 1, 0)
         self.analog_sig_source_x_0 = analog.sig_source_f(samp_rate, analog.GR_SQR_WAVE, 50, 2, -1)
         self.analog_noise_source_x_0 = analog.noise_source_c(analog.GR_GAUSSIAN, 0.001, 0)
 
@@ -105,8 +107,10 @@ class top_block(grc_wxgui.top_block_gui):
         self.connect((self.blocks_multiply_xx_0, 0), (self.blocks_throttle_0, 0))
         self.connect((self.gmsk_gmsk_demod_py_cc_0, 0), (self.wxgui_scopesink2_0, 0))
         self.connect((self.analog_noise_source_x_0, 0), (self.blocks_add_xx_0, 1))
-        self.connect((self.gmsk_gmsk_py_cc_0, 0), (self.blocks_add_xx_0, 0))
+        self.connect((self.analog_sig_source_x_1_0, 0), (self.blocks_multiply_xx_1, 1))
         self.connect((self.blocks_add_xx_0, 0), (self.gmsk_gmsk_demod_py_cc_0, 0))
+        self.connect((self.blocks_multiply_xx_0, 0), (self.blocks_multiply_xx_1, 0))
+        self.connect((self.blocks_multiply_xx_1, 0), (self.blocks_add_xx_0, 0))
 
 
 # QT sink close method reimplementation
@@ -120,8 +124,9 @@ class top_block(grc_wxgui.top_block_gui):
         self.analog_sig_source_x_0.set_sampling_freq(self.samp_rate)
         self.wxgui_fftsink2_0.set_sample_rate(self.samp_rate)
         self.blocks_throttle_0.set_sample_rate(self.samp_rate)
-        self.analog_sig_source_x_1.set_sampling_freq(self.samp_rate)
         self.wxgui_scopesink2_0.set_sample_rate(self.samp_rate)
+        self.analog_sig_source_x_1.set_sampling_freq(self.samp_rate)
+        self.analog_sig_source_x_1_0.set_sampling_freq(self.samp_rate)
 
 if __name__ == '__main__':
     import ctypes
