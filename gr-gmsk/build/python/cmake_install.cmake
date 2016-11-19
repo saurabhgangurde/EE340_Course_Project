@@ -37,6 +37,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/python/__init__.py"
     "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/python/gmsk_py_cc.py"
     "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/python/gmsk_demod_py_cc.py"
+    "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/python/channel_est_py_ccc.py"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
@@ -45,9 +46,11 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/build/python/__init__.pyc"
     "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/build/python/gmsk_py_cc.pyc"
     "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/build/python/gmsk_demod_py_cc.pyc"
+    "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/build/python/channel_est_py_ccc.pyc"
     "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/build/python/__init__.pyo"
     "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/build/python/gmsk_py_cc.pyo"
     "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/build/python/gmsk_demod_py_cc.pyo"
+    "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/build/python/channel_est_py_ccc.pyo"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

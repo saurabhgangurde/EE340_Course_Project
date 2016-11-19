@@ -3,11 +3,15 @@
 /usr/local/lib/python2.7/dist-packages/gmsk/__init__.py
 /usr/local/lib/python2.7/dist-packages/gmsk/gmsk_py_cc.py
 /usr/local/lib/python2.7/dist-packages/gmsk/gmsk_demod_py_cc.py
+/usr/local/lib/python2.7/dist-packages/gmsk/channel_est_py_ccc.py
 /usr/local/lib/python2.7/dist-packages/gmsk/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/gmsk/gmsk_py_cc.pyc
 /usr/local/lib/python2.7/dist-packages/gmsk/gmsk_demod_py_cc.pyc
+/usr/local/lib/python2.7/dist-packages/gmsk/channel_est_py_ccc.pyc
 /usr/local/lib/python2.7/dist-packages/gmsk/__init__.pyo
 /usr/local/lib/python2.7/dist-packages/gmsk/gmsk_py_cc.pyo
 /usr/local/lib/python2.7/dist-packages/gmsk/gmsk_demod_py_cc.pyo
+/usr/local/lib/python2.7/dist-packages/gmsk/channel_est_py_ccc.pyo
 /usr/local/share/gnuradio/grc/blocks/gmsk_gmsk_py_cc.xml
 /usr/local/share/gnuradio/grc/blocks/gmsk_gmsk_demod_py_cc.xml
+/usr/local/share/gnuradio/grc/blocks/gmsk_channel_est_py_ccc.xml

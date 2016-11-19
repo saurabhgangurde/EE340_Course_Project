@@ -19,58 +19,33 @@
 # Boston, MA 02110-1301, USA.
 # 
 
-import numpy 
+import numpy
 from gnuradio import gr
-import scipy.ndimage.filters as filters
 
-class gmsk_py_cc(gr.sync_block):
+class channel_est_py_ccc(gr.sync_block):
     """
-    docstring for block gmsk_py_cc
+    docstring for block channel_est_py_ccc
     """
     def __init__(self):
-
         gr.sync_block.__init__(self,
-            name="gmsk_py_cc",
-            in_sig=[numpy.float32],
+            name="channel_est_py_ccc",
+            in_sig=[numpy.complex64,numpy.complex64],
             out_sig=[numpy.complex64])
 
 
-
-    def gaussian(self,in_signal):
-        filtered=numpy.array([])
-        filters.gaussian_filter(in_signal, 20, order=0, output=filtered)
-        return filtered
-
     def work(self, input_items, output_items):
-
-
-        Fc = 1000       #simulate a carrier frequency of 1kHz
-        Fbit = 50       #simulated bitrate of data
-        Fdev = 5000      #frequency deviation, make higher than bitrate
-        N = 100        #how many bits to send
-        A = 1           #transmitted signal amplitude
-        Fs = 10000     #sampling frequency for the simulator, must be higher than twice the carrier frequency
-        A_n = 0.01      #noise peak amplitude
-        N_prntbits = 10 #number of bits to print in plots
-
-
         in0 = input_items[0]
+        in1 = input_items[1]
         out = output_items[0]
         # <+signal processing here+>
 
-        filters.gaussian_filter(in0, 6, order=0, output=in0)
-
-        c_t=[0 for i in range(len(in0))]
+        
+        h=0
         for i in range(len(in0)):
-            c_t[i]=c_t[i-1]+in0[i]
-
-        c_t=numpy.array(c_t)
-
-        c_t=10*c_t/Fs
-       
-
-
-        out[:] = numpy.cos(c_t)+1j*numpy.sin(c_t)
-
+            h+=in0[i]/in1[i]
+        h/=len(in0)
+        temp=numpy.ones(len(in0))*h
+        out[:] = temp
         return len(output_items[0])
+        
 

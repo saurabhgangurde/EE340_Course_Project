@@ -51,7 +51,6 @@ class gmsk_demod_py_cc(gr.sync_block):
 
         h=signal.firwin( numtaps=50, cutoff=500, nyq=Fs)
 
-        print "demodulator input:", len(in0)
         sin_phi_mul=in0.imag
         cos_phi_mul=in0.real
         

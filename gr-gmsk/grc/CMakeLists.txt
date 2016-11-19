@@ -19,5 +19,6 @@
 
 install(FILES
     gmsk_gmsk_py_cc.xml
-    gmsk_gmsk_demod_py_cc.xml DESTINATION share/gnuradio/grc/blocks
+    gmsk_gmsk_demod_py_cc.xml
+    gmsk_channel_est_py_ccc.xml DESTINATION share/gnuradio/grc/blocks
 )

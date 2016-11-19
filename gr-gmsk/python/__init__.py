@@ -47,6 +47,7 @@ if _RTLD_GLOBAL != 0:
 # import any pure python here
 from gmsk_py_cc import gmsk_py_cc
 from gmsk_demod_py_cc import gmsk_demod_py_cc
+from channel_est_py_ccc import channel_est_py_ccc
 #
 
 # ----------------------------------------------------------------

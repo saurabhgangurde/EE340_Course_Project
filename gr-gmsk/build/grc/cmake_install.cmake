@@ -36,6 +36,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gnuradio/grc/blocks" TYPE FILE FILES
     "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/grc/gmsk_gmsk_py_cc.xml"
     "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/grc/gmsk_gmsk_demod_py_cc.xml"
+    "/home/saurabh/Desktop/EE340_Course_Project/gr-gmsk/grc/gmsk_channel_est_py_ccc.xml"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

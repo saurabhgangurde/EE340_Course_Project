@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Top Block
-# Generated: Sat Nov 19 21:05:25 2016
+# Generated: Sat Nov 19 23:25:09 2016
 ##################################################
 
 from gnuradio import analog
@@ -14,6 +14,7 @@ from gnuradio.eng_option import eng_option
 from gnuradio.fft import window
 from gnuradio.filter import firdes
 from gnuradio.wxgui import fftsink2
+from gnuradio.wxgui import numbersink2
 from gnuradio.wxgui import scopesink2
 from grc_gnuradio import wxgui as grc_wxgui
 from optparse import OptionParser
@@ -39,7 +40,22 @@ class top_block(grc_wxgui.top_block_gui):
         self.notebook_0.AddPage(grc_wxgui.Panel(self.notebook_0), "tab1")
         self.notebook_0.AddPage(grc_wxgui.Panel(self.notebook_0), "tab2")
         self.notebook_0.AddPage(grc_wxgui.Panel(self.notebook_0), "tab3")
+        self.notebook_0.AddPage(grc_wxgui.Panel(self.notebook_0), "tab4")
         self.Add(self.notebook_0)
+        self.wxgui_scopesink2_0_1 = scopesink2.scope_sink_c(
+        	self.notebook_0.GetPage(3).GetWin(),
+        	title="Scope Plot",
+        	sample_rate=samp_rate,
+        	v_scale=0,
+        	v_offset=0,
+        	t_scale=0,
+        	ac_couple=False,
+        	xy_mode=False,
+        	num_inputs=1,
+        	trig_mode=wxgui.TRIG_MODE_AUTO,
+        	y_axis_label="Counts",
+        )
+        self.notebook_0.GetPage(3).Add(self.wxgui_scopesink2_0_1.win)
         self.wxgui_scopesink2_0_0 = scopesink2.scope_sink_f(
         	self.notebook_0.GetPage(0).GetWin(),
         	title="Scope Plot",
@@ -68,6 +84,23 @@ class top_block(grc_wxgui.top_block_gui):
         	y_axis_label="Counts",
         )
         self.notebook_0.GetPage(1).Add(self.wxgui_scopesink2_0.win)
+        self.wxgui_numbersink2_0 = numbersink2.number_sink_c(
+        	self.GetWin(),
+        	unit="Units",
+        	minval=-100,
+        	maxval=100,
+        	factor=1.0,
+        	decimal_places=10,
+        	ref_level=0,
+        	sample_rate=samp_rate,
+        	number_rate=15,
+        	average=False,
+        	avg_alpha=None,
+        	label="Number Plot",
+        	peak_hold=False,
+        	show_gauge=True,
+        )
+        self.Add(self.wxgui_numbersink2_0.win)
         self.wxgui_fftsink2_0 = fftsink2.fft_sink_c(
         	self.notebook_0.GetPage(2).GetWin(),
         	baseband_freq=0,
@@ -87,12 +120,14 @@ class top_block(grc_wxgui.top_block_gui):
         self.notebook_0.GetPage(2).Add(self.wxgui_fftsink2_0.win)
         self.gmsk_gmsk_py_cc_0 = gmsk.gmsk_py_cc()
         self.gmsk_gmsk_demod_py_cc_0 = gmsk.gmsk_demod_py_cc()
+        self.gmsk_channel_est_py_ccc_0 = gmsk.channel_est_py_ccc()
         self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate)
         self.blocks_multiply_xx_1 = blocks.multiply_vcc(1)
         self.blocks_multiply_xx_0 = blocks.multiply_vcc(1)
+        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_vcc((1+1j, ))
         self.blocks_add_xx_0 = blocks.add_vcc(1)
-        self.analog_sig_source_x_1_0 = analog.sig_source_c(samp_rate, analog.GR_COS_WAVE, 2000, 1, 0)
-        self.analog_sig_source_x_1 = analog.sig_source_c(samp_rate, analog.GR_COS_WAVE, 2000, 1, 0)
+        self.analog_sig_source_x_1_0 = analog.sig_source_c(samp_rate, analog.GR_COS_WAVE, 5000, 1, 0)
+        self.analog_sig_source_x_1 = analog.sig_source_c(samp_rate, analog.GR_COS_WAVE, 5000, 1, 0)
         self.analog_sig_source_x_0 = analog.sig_source_f(samp_rate, analog.GR_SQR_WAVE, 50, 2, -1)
         self.analog_noise_source_x_0 = analog.noise_source_c(analog.GR_GAUSSIAN, 0.001, 0)
 
@@ -100,17 +135,22 @@ class top_block(grc_wxgui.top_block_gui):
         # Connections
         ##################################################
         self.connect((self.analog_sig_source_x_0, 0), (self.gmsk_gmsk_py_cc_0, 0))
-        self.connect((self.analog_sig_source_x_0, 0), (self.wxgui_scopesink2_0_0, 0))
         self.connect((self.blocks_throttle_0, 0), (self.wxgui_fftsink2_0, 0))
         self.connect((self.gmsk_gmsk_py_cc_0, 0), (self.blocks_multiply_xx_0, 0))
         self.connect((self.analog_sig_source_x_1, 0), (self.blocks_multiply_xx_0, 1))
         self.connect((self.blocks_multiply_xx_0, 0), (self.blocks_throttle_0, 0))
         self.connect((self.gmsk_gmsk_demod_py_cc_0, 0), (self.wxgui_scopesink2_0, 0))
-        self.connect((self.analog_noise_source_x_0, 0), (self.blocks_add_xx_0, 1))
         self.connect((self.analog_sig_source_x_1_0, 0), (self.blocks_multiply_xx_1, 1))
-        self.connect((self.blocks_add_xx_0, 0), (self.gmsk_gmsk_demod_py_cc_0, 0))
-        self.connect((self.blocks_multiply_xx_0, 0), (self.blocks_multiply_xx_1, 0))
-        self.connect((self.blocks_multiply_xx_1, 0), (self.blocks_add_xx_0, 0))
+        self.connect((self.analog_sig_source_x_0, 0), (self.wxgui_scopesink2_0_0, 0))
+        self.connect((self.blocks_multiply_xx_0, 0), (self.blocks_multiply_const_vxx_0, 0))
+        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.blocks_add_xx_0, 0))
+        self.connect((self.analog_noise_source_x_0, 0), (self.blocks_add_xx_0, 1))
+        self.connect((self.blocks_add_xx_0, 0), (self.blocks_multiply_xx_1, 0))
+        self.connect((self.blocks_multiply_xx_1, 0), (self.gmsk_gmsk_demod_py_cc_0, 0))
+        self.connect((self.gmsk_gmsk_py_cc_0, 0), (self.gmsk_channel_est_py_ccc_0, 1))
+        self.connect((self.blocks_multiply_xx_1, 0), (self.gmsk_channel_est_py_ccc_0, 0))
+        self.connect((self.gmsk_channel_est_py_ccc_0, 0), (self.wxgui_scopesink2_0_1, 0))
+        self.connect((self.gmsk_channel_est_py_ccc_0, 0), (self.wxgui_numbersink2_0, 0))
 
 
 # QT sink close method reimplementation
@@ -124,9 +164,10 @@ class top_block(grc_wxgui.top_block_gui):
         self.analog_sig_source_x_0.set_sampling_freq(self.samp_rate)
         self.wxgui_fftsink2_0.set_sample_rate(self.samp_rate)
         self.blocks_throttle_0.set_sample_rate(self.samp_rate)
-        self.wxgui_scopesink2_0.set_sample_rate(self.samp_rate)
         self.analog_sig_source_x_1.set_sampling_freq(self.samp_rate)
         self.analog_sig_source_x_1_0.set_sampling_freq(self.samp_rate)
+        self.wxgui_scopesink2_0.set_sample_rate(self.samp_rate)
+        self.wxgui_scopesink2_0_1.set_sample_rate(self.samp_rate)
 
 if __name__ == '__main__':
     import ctypes
