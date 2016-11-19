@@ -31,7 +31,8 @@ endif()
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
-    gmsk_py_cc.py DESTINATION ${GR_PYTHON_DIR}/gmsk
+    gmsk_py_cc.py
+    gmsk_demod_py_cc.py DESTINATION ${GR_PYTHON_DIR}/gmsk
 )
 
 ########################################################################
@@ -42,3 +43,4 @@ include(GrTest)
 set(GR_TEST_TARGET_DEPS gnuradio-gmsk)
 set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
 GR_ADD_TEST(qa_gmsk_py_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_gmsk_py_cc.py)
+GR_ADD_TEST(qa_gmsk_demod_py_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_gmsk_demod_py_cc.py)

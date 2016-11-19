@@ -18,5 +18,6 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    gmsk_gmsk_py_cc.xml DESTINATION share/gnuradio/grc/blocks
+    gmsk_gmsk_py_cc.xml
+    gmsk_gmsk_demod_py_cc.xml DESTINATION share/gnuradio/grc/blocks
 )
